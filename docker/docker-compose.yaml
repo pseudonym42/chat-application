@@ -1,0 +1,16 @@
+version: '3.3'
+services:
+  mysql-chat-app:
+    image: mysql:8.0.29
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'chat_app_db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'pass'
+      MYSQL_ROOT_PASSWORD: 'pass'
+    ports:
+      - '4482:3306'
+    volumes:
+      - mysql-chat-app-db:/var/lib/mysql
+volumes:
+  mysql-chat-app-db:

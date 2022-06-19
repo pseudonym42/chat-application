@@ -3,15 +3,31 @@ const { User } = require('../models');
 const { UserInputError, AuthenticationError } = require('apollo-server');
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config/env.json");
+const { Op } = require("sequelize");
 
 module.exports = {
     Query: {
-        getUsers: async () => {
+        getUsers: async (parent, args, context, info) => {
             try {
-                const users = await User.findAll();
+                let user;
+                if (context.req && context.req.headers.authorization) {
+                    const token = context.req.headers.authorization.split("Bearer ")[1];
+                    jwt.verify(token, JWT_SECRET, (err, decodedToken) => {
+                        if (err) {
+                            throw new AuthenticationError("Not authenticated");
+                        }
+                        user = decodedToken;
+                    })
+                }
+                const users = await User.findAll({
+                    where: {
+                        username: { [Op.ne]: user.username }
+                    }
+                });
                 return users;
             } catch (error) {
                 console.error(error);
+                throw error;
             }
         },
         login: async (parent, args, context, info) => {
@@ -39,8 +55,12 @@ module.exports = {
                 const token = jwt.sign({
                     username: username
                   }, JWT_SECRET, { expiresIn: 60 * 60 });
-                  user.token = token;
-                return user;
+
+                return {
+                    ...user.toJSON(),
+                    createdAt: user.createdAt.toISOString(),
+                    token
+                };
             } catch (error) {
                 console.error(error);
             }

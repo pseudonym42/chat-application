@@ -1,6 +1,7 @@
-import { gql, useMutation } from '@apollo/client';
+import { gql, useLazyQuery } from '@apollo/client';
 import React, {useState} from 'react';
 import { useNavigate, Link } from "react-router-dom";
+
 import { 
   Row,
   Col,
@@ -8,74 +9,54 @@ import {
   Button,
 } from 'react-bootstrap';
 
-const REGISTER_USER = gql`
-  mutation register(
+const LOGIN_USER = gql`
+  query login(
     $username: String!, 
-    $email: String!, 
-    $password: String!, 
-    $confirmPassword: String!) {
-      register(
+    $password: String!) {
+      login(
         username: $username, 
-        email: $email, 
-        password: $password, 
-        confirmPassword: $confirmPassword) {
+        password: $password) {
           # fields to return
           username
           email
           createdAt
+          token
         }
   }
-
 `;
 
-export default function Register() {
+export default function Login() {
   const [variables, setVariable] = useState({
-    email: "",
     username: "",
     password: "",
-    confirmPassword: "",
   })
 
   const [errors, setErrors] = useState({});
 
   const navigate = useNavigate();
 
-  const [registerUser, { loading }] = useMutation(REGISTER_USER, {
-    update(cache, results){
-      console.log(results);
-      navigate('/login');
-    },
+  const [loginUser, { loading }] = useLazyQuery(LOGIN_USER, {
     onError(error){
       setErrors(error.graphQLErrors[0].extensions.errors)
-    }
+    },
+    onCompleted(data){
+      localStorage.setItem('token', data.login.token);
+      navigate('/');
+    },
   })
 
-  const submitRegisterForm = (event) => {
+  const submitLoginForm = (event) => {
     event.preventDefault();
-    registerUser({ variables: {
-      email: variables.email,
+    loginUser({ variables: {
       username: variables.username,
       password: variables.password,
-      confirmPassword: variables.confirmPassword
     }});
   }
   return (
     <Row className="bg-white py-4 justify-content-center">
       <Col sm={8} md={6} lg={4}>
-        <h1 className="text-center">Register</h1>
-          <Form onSubmit={submitRegisterForm}>
-            <Form.Group className="mb-3">
-              <Form.Label className={errors.email && 'text-danger'}>
-                { errors.email ?? 'Email address' }
-              </Form.Label>
-              <Form.Control 
-                type="email"
-                placeholder="Enter email"
-                className={errors.email && 'is-invalid'}
-                value={variables.email}
-                onChange={e => setVariable({...variables, email: e.target.value})}
-              />
-            </Form.Group>
+        <h1 className="text-center">Login</h1>
+          <Form onSubmit={submitLoginForm}>
             <Form.Group className="mb-3">
               <Form.Label className={errors.username && 'text-danger'}>
                 { errors.username ?? 'Username' }
@@ -100,25 +81,13 @@ export default function Register() {
                 onChange={e => setVariable({...variables, password: e.target.value})}
             />
             </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label className={errors.confirmPassword && 'text-danger'}>
-                { errors.confirmPassword ?? 'Confirm Password' }
-              </Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Password"
-                className={errors.confirmPassword && 'is-invalid'}
-                value={variables.confirmPassword}
-                onChange={e => setVariable({...variables, confirmPassword: e.target.value})}
-            />
-            </Form.Group>
             <Button variant="secondary" type="submit" disabled={loading}>
-              { loading ? 'Loading ...' : 'Register' }
+              { loading ? 'Loading ...' : 'Login' }
             </Button>
             <br />
-            <small>Already registered? 
-              <Link to="/login">
-                Login
+            <small>Do not have an account? 
+              <Link to="/register">
+                Register
               </Link>
             </small>
           </Form>

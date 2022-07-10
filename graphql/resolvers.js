@@ -50,7 +50,7 @@ module.exports = {
                 const passwordCorrect = await bcrypt.compare(password, user.password)
                 if (!passwordCorrect) {
                     errors.password = "Password is incorrect";
-                    throw new AuthenticationError("User not found", {errors: errors});
+                    throw new AuthenticationError("Password is incorrect", {errors: errors});
                 }
                 const token = jwt.sign({
                     username: username
@@ -63,6 +63,7 @@ module.exports = {
                 };
             } catch (error) {
                 console.error(error);
+                throw error;
             }
         }
     },
@@ -81,7 +82,7 @@ module.exports = {
                     registrationErrors.username = "Field <username> must not be empty";
                 }
                 if (confirmPassword.trim() === "") {
-                    registrationErrors.confirmPassword = "Field <confirmPassword> must not be empty";
+                    registrationErrors.confirmPassword = "Field <confirm password> must not be empty";
                 }
 
                 if (confirmPassword !== password) {

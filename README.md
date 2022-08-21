@@ -1,12 +1,22 @@
-# Description
+# Introduction
 
-This repository contains code for a chat application built
-with NodeJS, React and GraphQL.
+This repository contains code for a chat application built with NodeJS, React and GraphQL.
+I wrote this code to learn more about GraphQL and how it is used, and also to refresh my knowledge about React.
 
 The application consists of the server and client specific codes. The client code
 is located in the `client` folder.
 
+Check resolvers in `graphql/resolvers` folder for more information about what functionality
+the backend provides, but in short it allws uses to register, login and send messages to each other.
+
+The communication between frontend and backend is done with the help of [apollo](https://www.apollographql.com/) library.
+
+If you are not familiar with react `.createContext` API used in this application please
+read this article [How to use React Context effectively](https://kentcdodds.com/blog/how-to-use-react-context-effectively).
+
 # Project structure and main components
+
+This repository contains both front- and back-end code. See folder `client` for the frontend code. The backend code is distributed appropriately into 
 
 ## Database
 
@@ -35,3 +45,12 @@ in `config` folder. Secrets are stored in `config/env.js` file which is gitignor
 ## GraphQL
 
 All resolvers and GraphQL models are stored in the relevant `graphql` folder.
+
+
+## How to run the app
+
+You need to start both backend and the frontend apps:
+
+    > npm start
+
+    > npm run dev

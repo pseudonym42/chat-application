@@ -9,6 +9,8 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 
+import { AuthProvider } from './context/auth';
+
 /*
   We need to tell the router to stop matching further once 
   it matches a route. This is done using the Routes component 
@@ -16,19 +18,21 @@ import Home from "./pages/Home";
 */
 
 function App() {
-  return (
-    <ApolloProvider>
-      <BrowserRouter>
-        <Container className="pt-4">
-          <Routes>
-            <Route exact path="/" element={<Home/>} />
-            <Route path="/register" element={<Register/>} />
-            <Route path="/login" element={<Login/>} />
-          </Routes>
-        </Container>
-      </BrowserRouter>
-    </ApolloProvider>
-  );
+    return (
+        <ApolloProvider>
+            <AuthProvider>
+                <BrowserRouter>
+                    <Container className="pt-4">
+                        <Routes>
+                            <Route exact path="/" element={<Home />} />
+                            <Route path="/register" element={<Register />} />
+                            <Route path="/login" element={<Login />} />
+                        </Routes>
+                    </Container>
+                </BrowserRouter>
+            </AuthProvider>
+        </ApolloProvider>
+    );
 }
 
 export default App;

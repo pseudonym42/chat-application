@@ -1,8 +1,8 @@
 const bcrypt = require('bcryptjs');
-const { User, Message } = require('../models');
+const { User } = require('../../models');
 const { UserInputError, AuthenticationError } = require('apollo-server');
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET } = require("../config/env.json");
+const { JWT_SECRET } = require("../../config/env.json");
 const { Op } = require("sequelize");
 
 module.exports = {
@@ -153,30 +153,5 @@ module.exports = {
                 throw new UserInputError("Bad input", {errors: registrationErrors});
             }
         },
-        sendMessage: async(parent, args, context, info) => {
-            try {
-                let user = context.user;
-                if (!user) throw new AuthenticationError("Not authenticated");
-
-                const to = await User.findOne({
-                    where: {username: args.to}
-                })
-                if (!to) throw new UserInputError("User <to> not found");
-
-                if (args.content.trim() === '') {
-                    throw new UserInputError("Message cannot be empty");
-                }
-
-                const message = await Message.create({
-                    from: user.username,
-                    to: args.to,
-                    content: args.content
-                })
-                return message;
-            } catch(error) {
-                console.error(error)
-                throw error;
-            }
-        }
     }
 };

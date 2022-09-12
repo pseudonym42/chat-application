@@ -2,7 +2,7 @@ version: '3.3'
 services:
   mysql-chat-app:
     image: mysql:8.0.29
-    restart: always
+    # restart: always
     environment:
       MYSQL_DATABASE: 'chat_app_db'
       MYSQL_USER: 'user'

@@ -49,8 +49,10 @@ All resolvers and GraphQL models are stored in the relevant `graphql` folder.
 
 ## How to run the app
 
-You need to start both backend and the frontend apps:
-
-    > npm start
+Backend app:
 
     > npm run dev
+
+Frontend client:
+
+    > npm start

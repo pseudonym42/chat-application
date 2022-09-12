@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 
 import { AuthProvider } from './context/auth';
+import { AllowOnlyAuthenticated, RedirectAuthenticated } from './util/DynamicRoute';
 
 /*
   We need to tell the router to stop matching further once 
@@ -24,9 +25,21 @@ function App() {
                 <BrowserRouter>
                     <Container className="pt-4">
                         <Routes>
-                            <Route exact path="/" element={<Home />} />
-                            <Route path="/register" element={<Register />} />
-                            <Route path="/login" element={<Login />} />
+                            <Route exact path="/" element={
+                                <AllowOnlyAuthenticated>
+                                    <Home/>
+                                </AllowOnlyAuthenticated>
+                            }/>
+                            <Route path="/register" element={
+                                <RedirectAuthenticated>
+                                    <Register />
+                                </RedirectAuthenticated>
+                            }/>
+                            <Route path="/login" element={
+                                <RedirectAuthenticated>
+                                    <Login />
+                                </RedirectAuthenticated>
+                            }/>
                         </Routes>
                     </Container>
                 </BrowserRouter>

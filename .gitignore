@@ -1,6 +1,7 @@
 # Ignore project specific folders and files
 /config
 
+INSTRUCTIONS.md
 
 # compiled output
 /dist

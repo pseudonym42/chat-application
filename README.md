@@ -24,16 +24,22 @@ All data is stored in a MySQL database which runs inside a docker container, see
 
 Database migrations, queries and models are managed with `sequelize` and `sequelize-cli` libraries. Here are some useful commands:
 
-1. To generate a model:
+To generate a model:
 
-    npx sequelize model:generate --name User --attributes username:string,email:string
+    npx sequelize model:generate \
+        --name User \
+        --attributes username:string,email:string
 
-2. To run migrations:
+To run migrations:
 
     npx sequelize db:migrate
 
 All generated migrations are placed into `migrations` folder. All DB models located in
 `models` folder.
+
+There are some seed files which were generated via:
+
+    npx sequelize seed:generate --name <seeder_name>
 
 Dabase configuration is stored in the `config` folder.
 
@@ -46,13 +52,12 @@ in `config` folder. Secrets are stored in `config/env.js` file which is gitignor
 
 All resolvers and GraphQL models are stored in the relevant `graphql` folder.
 
-
 ## How to run the app
 
 Backend app:
 
-    > npm run dev
+    npm run dev
 
 Frontend client:
 
-    > npm start
+    npm start

@@ -7,9 +7,10 @@ import './App.scss';
 
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import Home from "./pages/Home";
+import Home from "./pages/home/Home";
 
 import { AuthProvider } from './context/auth';
+import { MessageProvider } from './context/message';
 import { AllowOnlyAuthenticated, RedirectAuthenticated } from './util/DynamicRoute';
 
 /*
@@ -22,27 +23,29 @@ function App() {
     return (
         <ApolloProvider>
             <AuthProvider>
-                <BrowserRouter>
-                    <Container className="pt-4">
-                        <Routes>
-                            <Route exact path="/" element={
-                                <AllowOnlyAuthenticated>
-                                    <Home/>
-                                </AllowOnlyAuthenticated>
-                            }/>
-                            <Route path="/register" element={
-                                <RedirectAuthenticated>
-                                    <Register />
-                                </RedirectAuthenticated>
-                            }/>
-                            <Route path="/login" element={
-                                <RedirectAuthenticated>
-                                    <Login />
-                                </RedirectAuthenticated>
-                            }/>
-                        </Routes>
-                    </Container>
-                </BrowserRouter>
+                <MessageProvider>
+                    <BrowserRouter>
+                        <Container className="pt-4">
+                            <Routes>
+                                <Route exact path="/" element={
+                                    <AllowOnlyAuthenticated>
+                                        <Home/>
+                                    </AllowOnlyAuthenticated>
+                                }/>
+                                <Route path="/register" element={
+                                    <RedirectAuthenticated>
+                                        <Register />
+                                    </RedirectAuthenticated>
+                                }/>
+                                <Route path="/login" element={
+                                    <RedirectAuthenticated>
+                                        <Login />
+                                    </RedirectAuthenticated>
+                                }/>
+                            </Routes>
+                        </Container>
+                    </BrowserRouter>
+                </MessageProvider>
             </AuthProvider>
         </ApolloProvider>
     );

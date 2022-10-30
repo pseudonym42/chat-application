@@ -54,6 +54,10 @@ All resolvers and GraphQL models are stored in the relevant `graphql` folder.
 
 ## How to run the app
 
+First you need to run the DB container, cd into the docker folder and run:
+
+    docker-compose up
+
 Backend app:
 
     npm run dev
